@@ -1,0 +1,32 @@
+# CCA-CERTIFICATION
+
+
+sqoop import
+
+hive
+
+importing into already existing table in hive
+
+sqoop import 
+--connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" 
+--username retail_dba 
+--password itversity 
+--table departments 
+--hive-home /apps/hive/warehouse 
+--hive-import 
+--hive-overwrite 
+--hive-table sqoop_importj.departments 
+--outdir java_files
+
+creating hive table while importing
+
+sqoop import 
+--connect "jdbc:mysql://nn01.itversity.com/retail_db" 
+--username retail_dba
+--password itversity 
+--table departments 
+--hive-home /apps/hive/warehouse 
+--hive-import 
+--hive-table sqoop_importj.departments_test 
+--create-hive-table 
+--outdir java_files
