@@ -48,6 +48,49 @@ sqoop import
 
 
 
+sqoop import 
+--connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" 
+--username retail_dba 
+--password itversity 
+--table departments 
+--target-dir /user/jagadeesh427/sqoop_import/departments_enclosedby 
+--enclosed-by \" 
+--fields-terminated-by \| 
+--lines-terminated-by \|
+
+
+
+hadoop fs -cat /user/jagadeesh427/sqoop_import/departments_enclosedby/part*
+
+
+sqoop import 
+--connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" 
+--username retail_dba 
+--password itversity 
+--table departments 
+--hive-home /apps/hive/warehouse 
+--hive-import 
+--hive-table departments_test_01 
+--create-hive-table
+--outdir java_files
+
+
+
+
+null string::;
+
+
+--null-string 
+--null-non-string 
+
+
+
+
+
+
+
+
+
 
 
 
