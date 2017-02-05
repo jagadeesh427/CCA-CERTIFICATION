@@ -117,6 +117,74 @@ hadoop fs -cat /user/jagadeesh427/departments/part*
 
 
 
+sqoop job and sqoop merge
+
+
+sqoop job 
+--create sqoop_job 
+-- import --connect "jdbc:mysql://nn01.itversity.com:3306/retail_import" 
+--username retail_dba
+--password itversity 
+--table departments 
+--target-dir /apps/hive/warehouse/retail_ods.db/departments 
+--append 
+--fields-terminated-by '|'
+--lines-terminated-by '\n' 
+--check-column "department_id"
+--incremental append 
+--last-value 7
+--outdir java_files
+
+sqoop job --list
+
+sqoop job --show sqoop_job
+
+
+sqoop job --exec sqoop_job
+
+
+sqoop import 
+--connect "jdbc:mysql://nn01.itversity.com:3306/retail_import"
+--username retail_dba 
+--password itversity 
+--table departments 
+--target-dir=/user/jagadeesh427/sqoop_merge/departments
+
+
+
+sqoop eval 
+--connect "jdbc:mysql://nn01.itversity.com:3306/retail_import" 
+--username retail_dba  
+--password itversity 
+--query "select * from departments"
+
+
+hadoop fs -cat /user/jagadeesh427/sqoop_merge/departments/part*
+
+
+sqoop eval
+--connect "jdbc:mysql://nn01.itversity.com:3306/retail_import" 
+--username retail_dba  
+--password itversity 
+--query "update departments set department_name='Testing Merge_01' where department_id = 9000"
+
+
+
+
+sqoop eval
+--connect "jdbc:mysql://nn01.itversity.com:3306/retail_import"
+--username retail_dba  
+--password itversity 
+--query "insert into departments values (10000, 'inserting for merge1')"
+
+
+
+
+sqoop eval 
+--connect "jdbc:mysql://nn01.itversity.com:3306/retail_import" 
+--username retail_dba  
+--password itversity
+--query "select * from departments"
 
 
 
