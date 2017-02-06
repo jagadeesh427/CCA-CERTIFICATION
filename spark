@@ -25,3 +25,33 @@ dataRDD.saveAsTextFile("/user/jagadeesh427/pyspark/departments")
 
 spark-submit --master yarn or local saveFile.py
 
+
+# Load data form HDFS and storing results back from HDFS using Spark
+
+
+
+sc.textFile("/user/jagadeesh427/sqoop_import/departments")
+
+data = sc.textFile("/user/jagadeesh427/sqoop_import/departments")
+
+to read and print
+
+for i in data.collect():
+   print(i)
+   
+#READING File from local 
+
+data = sc.textFile(file:///home/jagadeesh427/demo)
+
+
+
+
+
+
+
+
+
+
+
+
+
