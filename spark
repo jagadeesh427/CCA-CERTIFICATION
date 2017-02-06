@@ -1,1 +1,12 @@
+pyspark
 
+
+from pyspark.sql  import HiveContext
+sqlContext = HiveContext(sc)
+depts = sqlContext.sql("select * from categories")
+
+
+for rec in depts.collect():
+   print(rec)
+   
+   
