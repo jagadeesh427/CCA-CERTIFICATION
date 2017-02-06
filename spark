@@ -56,10 +56,16 @@ for i in data.collect():
   
   data = sqlContext.sql("create table departmentstestj as select * from departments_1")
 
+
 #WORDCOUNT USING PYSPARK
 
 create text file in local system
 
+data = sc.textFile("/user/jagadeesh427/wordcount1.txt")
+dataFlatMap = data.flatMap(lambda x: x.split(" "))
+dataMap = dataFlatMap.map(lambda x: (x,1))
+wordcount = dataMap.reduceByKey(lambda x,y: x + y)
+wordcount.saveAsTextFile("/user/jagadeesh427/wordcountoutput.com")
 
 
 
@@ -90,15 +96,9 @@ create text file in local system
 
 
 
-save as sequence file
 
 
-for i in dataRDD.map(lambda x: tuple(x.split(",", 1))).collect():
-print(i)
 
-dataRDD.map(lambda x: tuple(x.split(",", 1))).saveAsSequenceFile("/user/jagadeesh427/pyspark/ddepartmentseq")
-
-#reading data from HIVE AND JSON 
 
 
 
