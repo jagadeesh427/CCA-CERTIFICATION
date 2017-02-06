@@ -44,9 +44,61 @@ for i in data.collect():
 data = sc.textFile(file:///home/jagadeesh427/demo)
 
 
+#Reading data from HIve and JSON
+
+from pyspark.sql import HiveContext
+sqlContext = HiveContext(sc)
+data = sqlContext.sql(" select * from departments_1")
+
+for i in data.collect():
+  print(i)
+  
+  
+  data = sqlContext.sql("create table departmentstestj as select * from departments_1")
+
+#WORDCOUNT USING PYSPARK
+
+create text file in local system
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+save as sequence file
+
+
+for i in dataRDD.map(lambda x: tuple(x.split(",", 1))).collect():
+print(i)
+
+dataRDD.map(lambda x: tuple(x.split(",", 1))).saveAsSequenceFile("/user/jagadeesh427/pyspark/ddepartmentseq")
+
+#reading data from HIVE AND JSON 
 
 
 
