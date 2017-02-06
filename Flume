@@ -40,3 +40,88 @@ flume-ng agent
 telnet localhost 44444
 
 type the information..
+
+
+Uisng HDFS sink
+
+create a dir in hdfs location with name flume
+
+flume.conf
+
+# example.conf: A single-node Flume configuration
+
+# Name the components on this agent
+a1.sources = r1
+a1.sinks = k1
+a1.channels = c1
+
+# Describe/configure the source
+a1.sources.r1.type = netcat
+a1.sources.r1.bind = localhost
+a1.sources.r1.port = 44444
+
+# Describe the sink
+a1.sinks.k1.type = hdfs
+
+# Use a channel which buffers events in memory
+a1.channels.c1.type = memory
+a1.channels.c1.capacity = 1000
+a1.channels.c1.transactionCapacity = 100
+
+#customizing sink for hdfs
+
+a1.sinks.k1.hdfs.path = /user/jagadeesh427/flume
+a1.sinks.k1.hdfs.fileprefix = netcat
+
+# Bind the source and sink to the channel
+a1.sources.r1.channels = c1
+a1.sinks.k1.channel = c1
+
+
+command
+
+flume-ng agent -n a1 -c  /home/jagadeesh427/flume/conf -f /home/jagadeesh427/flume/conf/example.conf
+
+telnet localhost 44444
+
+type the data
+
+hadoop fs -ls /user/jagadeesh427/flume
+
+
+
+
+
+after changing parameters
+
+conf file
+
+ Name the components on this agent
+a1.sources = r1
+a1.sinks = k1
+a1.channels = c1
+
+# Describe/configure the source
+a1.sources.r1.type = netcat
+a1.sources.r1.bind = localhost
+a1.sources.r1.port = 44444
+
+# Describe the sink
+a1.sinks.k1.type = hdfs
+
+# Use a channel which buffers events in memory
+a1.channels.c1.type = memory
+a1.channels.c1.capacity = 1000
+a1.channels.c1.transactionCapacity = 100
+
+#customizing sink for hdfs
+
+a1.sinks.k1.hdfs.path = /user/jagadeesh427/flume
+a1.sinks.k1.hdfs.fileprefix = netcat
+a1.sinks.k1.hdfs.filetype  = DataStream
+a1.sinks.k1.hdfs.rollInterval = 120
+
+# Bind the source and sink to the channel
+a1.sources.r1.channels = c1
+a1.sinks.k1.channel = c1
+
