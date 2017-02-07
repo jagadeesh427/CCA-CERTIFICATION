@@ -85,7 +85,29 @@ orderItemsParsedRDD = orderItemsRDD.map(lambda rec: (int(rec.split(",")[1]), rec
  
 
 
+#joining datasets using SQL context
 
+from pyspark.sql import HiveContext
+sqlContext = HiveContext(sc)
+count = sqlContext.sql("select count(1) from orders")
+
+for i in count.collect():
+  print(i)
+  
+ count = sqlContext.sql("select count(1) from order_itmes") 
+ 
+ for i in count.collect():
+   print(i)
+   
+   
+joinRDD = sqlContext.sql("select o.order_date, sum(oi.order_item_subtotal), 
+count(distinct o.order_id) from orders o join order_items oi on o.order_id = oi.order_item_order_id \  
+
+group by o.order_date order by o.order_date")
+
+
+
+#Calculate aggregate statistics
 
 
 
