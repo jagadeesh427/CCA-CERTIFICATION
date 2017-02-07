@@ -68,6 +68,21 @@ wordcount = dataMap.reduceByKey(lambda x,y: x + y)
 wordcount.saveAsTextFile("/user/jagadeesh427/wordcountoutput.com")
 
 
+#Joining datasets using PYTHON
+
+
+ordersRDD = sc.textFile("/user/jagadeesh427/sqoop_import/orders")
+orderItemsRDD = sc.textFile("/user/cloudera/sqoop_import/order_items")
+
+
+ordersParsedRDD = ordersRDD.map(lambda rec: (int(rec.split(",")[0]), rec))
+orderItemsParsedRDD = orderItemsRDD.map(lambda rec: (int(rec.split(",")[1]), rec))
+
+ ordersJoinOrderItems = orderItemsParsedRDD.join(ordersParsedRDD)
+ 
+ joinData = ordersJoinOrderItems.map(lambda t: (t[1][1].split(",")[1], float(t[1][0].split(",")[4])))
+ 
+ 
 
 
 
