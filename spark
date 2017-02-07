@@ -110,6 +110,41 @@ group by o.order_date order by o.order_date")
 #Calculate aggregate statistics
 
 
+ordersRDD = sc.textFile("/user/jagadeesh427/sqoop_import/orders")
+ordersRDD.count()
+orderItemsRDD = sc.textFile("/user/jagadeesh427/sqoop_import/order_items")
+orderItemsRDDMap = orderItemsRDD.map(lambda rec: rec.split(",")[4])
+for i in orderItemsRDDMap.take(5):
+
+
+orderItemsRDDMap = orderItemsRDD.map(lambda rec: float(rec.split(",")[4]))
+orderItemsRDDMap.reduce(lambda rev1, rev2: rev1+rev2)
+
+# max price of product from product table
+productRDD = sc.textFile("/user/jagadeesh427/sqoop_import/products")
+
+productMap = productsRDD.map(lambda rec: rec)
+
+
+productMap.reduce(lambda rec1, rec2: (rec1 if((rec1.split(",")[4] != "" and rec2.split(",")[4] != "") 
+and float(rec1.split(",")[4]) >= float(rec2.split(",")[4])) else rec2))
+
+
+#average
+
+
+orderitemsRDD = sc.textFile("/user/jagadeesh427/sqoop_import/order_items")
+totalrevenue = orderitemsRDD.map(lambda rec: float(rec.split(",")[4]).reduce(lambda acc, val: acc+val))
+totalrevenue
+
+or
+totalrevenue = orderitemsRDD.map(lambda rec: float(rec.split(",")[4]))
+
+totalR = totalrevenue.reduce(lambda acc, val: acc+val)
+totalorders = orderitemsRDD.map(lambda rec: rec.split(",")[1]).distinct().count()
+
+totalR/totalorders
+
 
 
 
