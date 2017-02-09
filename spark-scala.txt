@@ -1,0 +1,56 @@
+val departmentsRDD = sc.textFile("hdfs://nn01.itversity.com:8020/user/jagadeesh427/sqoop_import/departments")
+
+departmentsRDD.collect()
+
+val departmetnRDD = sc.textFile("/user/jagadeesh427/sqoop_import/departments")
+departmetnRDD.collect().foreach(println)
+
+
+dataRDD.map(x => (NullWritable.get(), x)).saveAsSequenceFile("/user/jagadeesh427/sparkscala/departmentseq")
+
+#reading a seqenceFile
+
+sc.sequenceFile("/user/jagadeesh427/sparkscala/departmentseq",classOf[IntWritable], classOf[Text]).map(rec => rec.toString()).collect().foreach(println)
+
+
+import org.apache.spark.sql.hive.HiveContext
+val sqlContext = new HiveContext(sc)
+val deptsRDD = sqlContext.sql("select * from departments")
+
+failed
+
+JSON
+create json file departmetns.json
+
+"department_id":2, "department_name":"Fitness"}
+{"department_id":3, "department_name":"Footwear"}
+{"department_id":4, "department_name":"Apparel"}
+{"department_id":5, "department_name":"Golf"}
+{"department_id":6, "department_name":"Outdoors"}
+{"department_id":7, "department_name":"Fan Shop"}
+{"department_id":8, "department_name":"TESTING"}
+
+
+
+
+import org.apache.spark.sql.SQLContext
+val sqlContext = new SQLContext(sc)
+
+val departmentsJSON = sqlContext.jsonFile("/user/jagadeesh427/sparkscala/departments.json")
+departmentsJSON.registerTempTable("departmentsTable")
+val departmentsData = sqlContext.sql("select * from departmentsTable")
+departmentsData.collect().foreach(println)
+
+# writing  json data into text
+
+departmentsData.toJSON.saveAsTextFile("/user/jagadeesh427/sparkscala/departmentsJson")
+
+hadoop fs -cat /user/jagadeesh427/sparkscala/departmentsJson/part*
+
+
+
+
+
+
+
+
