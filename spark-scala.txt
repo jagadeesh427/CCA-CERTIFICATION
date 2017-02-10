@@ -50,6 +50,85 @@ hadoop fs -cat /user/jagadeesh427/sparkscala/departmentsJson/part*
 
 
 
+#WORDCOUNT
+
+val dataRDD = sc.textFile("/user/jagadeesh427/wordcount")
+val dataFlatmap = dataRDD.flatMap(x => x.split(" "))
+val dataMap = dataFlatmap.map(x =>  (x,1))
+val dataReduceByKey = dataMap.reduceByKey((x,y) => x = y)
+dataReduceByKey.saveAsTextFile("/user/jagadeesh427/sparkWCOUTPUT.txt")
+
+
+# Joining datasets
+
+val ordersRDD = sc.textFile("/user/jagadeesh427/sqoop_import/orders")
+ordersRDD.take(5).foreach(println)
+val orderitemsRDD = sc.textFile("/user/jagadeesh427/sqoop_import/order_items")
+orderitemsRDD.take(5).foreach(println)
+
+ val ordersparsedRDD = ordersRDD.map(rec  => (rec.split(",")(0).toInt, rec))
+
+val orderitemsparsedRDD = orderitemsRDD.map(rec => (rec.split(",")(1).toInt, rec))
+ordersjoinorderitems.take(5).foreach(println)
+
+val revenueperorderperday = ordersjoinorderitems.map(t => (t._2._2.split(",")(1), t._2._1.split(",")(4).toFloat))
+
+
+# order count per day
+val ordersperday = ordersjoinorderitems.map(rec => rec._2._2.split(",")(1) + "," + rec._1).distinct()
+val ordersperdayparsedRDD = ordersperday.map(rec => (rec.split(",")(0),1))
+
+val totalordersperday = ordersperdayparsedRDD.reduceByKey((x, y) => x + y)
+
+#total revenue per day from joined data
+
+val revenueperorderperday = ordersjoinorderitems.map(t => (t._2._2.split(",")(1), t._2._1.split(",")(4).toFloat))
+val totalrevenueperday = revenueperorderperday.reduceByKey((total1, total2) => total1 + total2)
+totalrevenueperday.sortByKey().collect().foreach(println)
+
+#joining ordercount per day and revenue perday
+val finaljoinRDD = totalordersperday.join(totalrevenueperday)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
