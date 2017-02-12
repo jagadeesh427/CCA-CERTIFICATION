@@ -199,6 +199,10 @@ finalfilter = applykey.filter(rec => rec._2 >= 1000)
 
 
 
+#Write a query that produces ranked or sorted data using Spark
+
+
+#Global ranking and sorting
 
 
 
