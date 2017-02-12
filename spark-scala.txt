@@ -130,6 +130,82 @@ revperorder.reduce((acc, value) =>
 (if (acc._2 >= value._2) acc
 else value))
 
+#NUMBER OF ORDERS PER STATUS
+
+val ordersRDD = sc.textFile("/user/jagadeesh427/sqoop_import/orders")
+val orderstatus = ordersRDD.map(rec  => (rec.split(",")(3), 1))
+orderstatus.countByKey().foreach(println)
+
+#grouupByKey
+
+val orderbystatus = orderstatus.groupByKey().map(rec => (rec._1 , rec._2.sum))
+orderbystatus.collect().foreach(println)
+
+#reduceByKey
+
+val orderbystatus = orderstatus.reduceByKey((acc, value) => acc + value)
+
+
+#combinerByKey  when reduce logic and combine logic is different
+
+val orderbystatus = orderstatus.combineByKey(value => 1, (acc: Int, value: Int) => acc+value, (acc: Int, value: Int) => acc+value)
+
+#AgrregateByKey  when input and ouput are different
+
+
+
+
+
+
+#customer ID with max rev
+
+val ordersparsedRDD = ordersRDD.map(rec => (rec.split(",")(0), rec))
+val orderitemsparsedRDD = orderitemsRDD.map(rec => (rec.split(",")(1), rec))
+
+val ordersjoinorderitems = orderitemsparsedRDD.join(ordersparsedRDD)
+
+
+val orderdaterev = ordersjoinorderitems.map(t => ((t._2._2.split(",")(1), t._2._2.split(",")(2)) , t._2._1.split(",")(4).toFloat))
+val revperdaypercus = orderdaterev.reduceByKey((x,y) => x + y)
+
+val revperdaypercusmap  = revperdaypercus.map(rec => (rec._1, (rec._1._2, rec._2)))
+
+
+
+
+
+#FILERING
+
+
+
+val ordersRDD = sc.textFile("/user/jagadeesh427/sqoop_import/orders")
+ordersRDD.filter(rec => (rec.split(",")(3).equals("COMPLETE"))).take(10).foreach(println)
+ordersRDD.filter(rec => (rec.split(",")(0).toInt > 100)).take(100).foreach(println)
+ordersRDD.filter(rec => (rec.split(",")(0).toInt > 100 || (rec.split(",")(3).contains("PENDING")))).take(100).foreach(println)
+
+
+#finding out cancelled orders  greater than $1000
+
+val ordersParsedRDD = ordersRDD.filter(rec => (rec.split(",")(3).contains("CANCELED"))).map(rec => (rec.split(",")(0).toInt, rec))
+
+val orderitemsparsedRDD = orderitemsRDD.map(rec => (rec.split(",")(1).toInt, rec))
+val ordersjoinorderitems = orderitemsparsedRDD.join(ordersParsedRDD)
+
+val joinfliter = ordersjoinorderitems.map(rec => (rec._1, rec._2._1.split(",")(4).toFloat))
+val applykey = joinfliter.reduceByKey((acc , value) => (acc + value))
+
+finalfilter = applykey.filter(rec => rec._2 >= 1000)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
