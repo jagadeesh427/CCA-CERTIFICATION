@@ -1,0 +1,54 @@
+sqoop import-all-tables -m 1 --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" 
+--username retail_dba  --password itversity --as-avrodatafile --warehouse-dir=/apps/hive/warehouse/jagadeesh.db
+
+
+hadoop fs -ls /apps/hive/warehouse/jagadeesh.db/departments
+
+cat part-m-00000.avro
+
+avro-tools getmeta part-m-00000.avro
+avro-tools getschema part-m-00000.avro
+avro-tools getschema part-m-00000.avro > departments.json
+
+cat departments.json
+
+avro-tools tojson part-m-00000.avro
+
+
+ avro-tools getschema part-m-00000.avro > departments.avsc
+avro-tools fromjson --schema-file departments.avsc
+
+
+hadoop fs -copyFromLocal *.avsc /user/jagadeesh427/retail_stage
+
+
+CREATE EXTERNAL TABLE categories
+    > ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.avro.AvroSerDe'
+    > STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat'
+    > OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat'
+    > LOCATION 'hdfs:///apps/hive/warehouse/jagadeesh.db/categories'
+    > TBLPROPERTIES ('avro.schema.url' = '/user/jagadeesh427/retail_stage/categories.avsc');
+
+
+select * from categories;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
