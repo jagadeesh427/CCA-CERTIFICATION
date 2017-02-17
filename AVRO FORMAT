@@ -32,9 +32,30 @@ CREATE EXTERNAL TABLE categories
 
 select * from categories;
 
+CREATE EXTERNAL TABLE DEPARTMENTSNEW
+    > STORED AS AVRO
+    > LOCATION 'hdfs:///apps/hive/warehouse/jagadeesh.db/departments'
+    > TBLPROPERTIES('avro.schema.url' = '/user/jagadeesh427/retail_stage/departments.avsc');
+
+select * from DEPARTMENTSNEW
+
+CREATE EXTERNAL TABLE customers 
+    > STORED AS AVRO
+    > LOCATION 'hdfs:///apps/hive/warehouse/jagadeesh.db/customers'
+    > TBLPROPERTIES('avro.schema.url' = '/user/jagadeesh427/retail_stage/customers.avsc');
 
 
-
+create external table orders
+    > stored as avro
+    > location 'hdfs:///apps/hive/warehouse/jagadeesh.db/orders'
+    > TBLPROPERTIES ('avro.schema.url' = '/user/jagadeesh427/retail_stage/orders.avsc');
+    
+  create external table order_items
+    > stored as avro
+    > location 'hdfs:///apps/hive/warehouse/jagadeesh.db/order_items'
+    > TBLPROPERTIES('avro.schema.url' = '/user/jagadeesh427/retail_stage/order_items.avsc');
+    
+    
 
 
 
