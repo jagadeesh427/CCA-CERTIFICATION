@@ -1,0 +1,11 @@
+scala> object hw {
+     | def main(args: Array[String]) {
+     | println("HELOO WAORLD")
+     | }
+     | }
+defined object hw
+
+scala> hw.main(Array(""))
+HELOO WAORLD
+
+
